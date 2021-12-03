@@ -14,6 +14,12 @@ class Alarm extends HiveObject {
   @HiveField(2)
   bool isActive;
 
+  Alarm({
+    required this.alarmTime,
+    this.stopTime,
+    this.isActive = false,
+  });
+
   int? get deltaTime {
     DateTime? doneTime = stopTime;
     if (doneTime == null) return null;
@@ -21,12 +27,6 @@ class Alarm extends HiveObject {
     int startSec = (alarmTime.hour * 60 + alarmTime.minute) * 60;
     return doneSec - startSec;
   }
-
-  Alarm({
-    required this.alarmTime,
-    this.stopTime,
-    this.isActive = false,
-  });
 
   Alarm copyWith({
     TimeOfDay? alarmTime,

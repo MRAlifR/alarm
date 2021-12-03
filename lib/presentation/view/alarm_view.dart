@@ -18,6 +18,27 @@ class _AlarmViewState extends State<AlarmView> {
   Offset startOffset = Offset.zero;
 
   @override
+  void initState() {
+    super.initState();
+
+    checkPermission();
+    AwesomeNotifications().actionStream.listen((notification) {
+      context.read<AlarmCubit>().onSetDone();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const AlarmChartView(),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    AwesomeNotifications().actionSink.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
@@ -162,7 +183,7 @@ class _AlarmViewState extends State<AlarmView> {
               child: const Text(
                 'Allow',
                 style: TextStyle(
-                  color: Colors.teal,
+                  color: Colors.blue,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -172,27 +193,6 @@ class _AlarmViewState extends State<AlarmView> {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    AwesomeNotifications().actionSink.close();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    checkPermission();
-    AwesomeNotifications().actionStream.listen((notification) {
-      context.read<AlarmCubit>().onSetDone();
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const AlarmChartView(),
-        ),
-      );
-    });
   }
 
   void onDragEndHandler() {
